@@ -1,6 +1,9 @@
 {
   "pages": [
-    "pages/tabbar/index/index"
+    "pages/tabbar/index/index",
+    "pages/tabbar/mail/mail",
+    "pages/tabbar/find/find",
+    "pages/tabbar/my/my"
   ],
   "subPackages": [],
   "window": {

@@ -1,26 +1,121 @@
 <template>
-	<view class="page">
+	<view>
 		
-		
-		<view class="pt-5">
-			<text class="iconfont" style="font-size: 200rpx;">&#xe6dc;</text>
-		</view>
+		<free-nav-bar  title="防微信" :noreadnum="100"  />			
+			<!-- 列表 -->
+			<block v-for="(item,index) in list" :key="index">
+				<freeMediaList :item="item" :index="key" @long="long"></freeMediaList>
+			</block>
+			
+		<free-popup mask ref="extend" :bodyWidth="240" :bodyHeight="getMenusHeight">
+			<view  class="flex flex-column" style="width: 240rpx;" :style="getMenusStyle">
+				<view class="flex-1 flex align-center" hover-class="bg-light" v-for="(item,index) in menus" :key="index" @click="clickEvent(item.event)">
+					<text class="font-md pl-2">{{item.name}}</text>					
+				</view>
+			</view>
+			
+		</free-popup>
+			
 		
 	</view>
 </template>
 
 <script>
+	import freePopup from "@/components/free-ui/free-popup.vue" 
+	import freeNavBar from "@/components/free-ui/free-nav-bar.vue"
+	import freeMediaList from "@/components/free-ui/free-media-list.vue"
+	
 	export default {
+	
+		components:{
+			freeNavBar,
+			freeMediaList,
+			freePopup
+		},
 		data() {
 			return {
-				
+				popIndex:-1,
+				menus:[
+						{
+							name:"设为置顶",
+							event:"setTop"
+						},
+						{
+							name:"删除该聊天",
+							event:"delChat"
+						}
+					],
+				list:[
+					{
+						avater:"/static/images/demo/demo6.jpg",
+						nickname:"亲爱的1",
+						update_time:1567704767,
+						data:"一击必杀",
+						noreadnum:1
+					},
+					{
+						avater:"/static/images/demo/demo6.jpg",
+						nickname:"亲爱的2",
+						update_time:1567704767,
+						data:"一击必杀",
+						noreadnum:0
+					},
+					{
+						avater:"/static/images/demo/demo6.jpg",
+						nickname:"亲爱的3",
+						update_time:1567704767,
+						data:"一击必杀",
+						noreadnum:0
+					},
+					{
+						avater:"/static/images/demo/demo6.jpg",
+						nickname:"亲爱的4",
+						update_time:1567704767,
+						data:"一击必杀",
+						noreadnum:0
+					}
+				]
+			}
+		},
+		filters:{
+			formatTime(value){
+				return $time.gettime(value);
 			}
 		},
 		onLoad() {
 			
 		},
+		computed:{
+			getMenusHeight(){
+				let H=100;
+				return this.menus.length*H;
+			},
+			// 获取菜单的样式
+			getMenusStyle(){
+				return `height: ${this.getMenusHeight}rpx;`
+			}
+		},
 		methods: {
-
+			long({x,y,index}){
+				
+				this.popIndex=index;
+				this.$refs.extend.show(x,y);
+			},// 分发菜单事件
+			clickEvent(event){
+				switch (event){
+					case "setTop":
+						
+						break;
+					case "delChat":
+						this.delChat();
+						this.$refs.extend.hide();
+						break;
+				}
+			},
+			delChat(){
+				this.list.splice(this.popIndex,1);
+				
+			}
 		}
 	}
 </script>
